@@ -25,9 +25,9 @@
     <tbody>
         @foreach($shares as $share)
         <tr>
-            <td>{{$share->id}}</td>
-            <td>{{$share->name}}</td>
-            <td>{{$share->password}}</td>
+            <td>{{ $share->id }}</td>
+            <td>{{ $share->name }}</td>
+            <td>{{ $share->password }}</td>
             <td><a href="{{ route('shares.edit',$share->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
                 <form action="{{ route('shares.destroy', $share->id)}}" method="post">

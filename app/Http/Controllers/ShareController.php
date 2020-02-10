@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\model\share;
+use \App\Http\Requests\StoreShare;
 
 class ShareController extends Controller
 {
@@ -16,7 +17,9 @@ class ShareController extends Controller
     {
         $shares = Share::all();
 
-        return view('index', compact('shares'));
+        return view('index', [
+            'shares'=> $shares
+        ]);
     }
 
     /**
@@ -35,18 +38,11 @@ class ShareController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreShare $request)
     {
-        $request->validate([
-            'name'=>'required',
-            'password'=> 'required|integer'
-          ]);
-          $share = new Share([
-            'name' => $request->get('name'),
-            'password'=> $request->get('password')
-          ]);
-          $share->save();
-          return redirect('/shares')->with('success', 'Stock has been added');
+     $share = Share::create($request -> all());
+     
+     return redirect()->route('shares.index')->with('success');
     }
 
     /**
@@ -68,9 +64,11 @@ class ShareController extends Controller
      */
     public function edit($id)
     {
-        $share = Share::find($id);
+        $share = Share::findOrFail($id);
 
-        return view('edit', compact('share'));
+        return view('edit', [
+            'share'=> $share
+        ]);
     }
 
     /**
@@ -80,19 +78,11 @@ class ShareController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreShare $request, $id)
     {
-        $request->validate([
-            'name'=>'required',
-            'password'=> 'required|integer'
-          ]);
-    
-          $share = Share::find($id);
-          $share->name = $request->get('name');
-          $share->password = $request->get('password');
-          $share->save();
-    
-          return redirect('/shares')->with('success', 'Stock has been updated');
+        //   $share = Share::created($request -> all());
+        $share = Share::findOrFail($id)->update($request->all());
+        return redirect()->route('shares.create')->with('success');
     }
 
     /**
@@ -103,9 +93,10 @@ class ShareController extends Controller
      */
     public function destroy($id)
     {
-        $share = Share::find($id);
+        $share = Share::findOrFail($id);
+
         $share->delete();
 
-        return redirect('/shares')->with('success', 'Stock has been deleted Successfully');
+        return redirect()->route('shares.create')->with('success');
     }
 }
