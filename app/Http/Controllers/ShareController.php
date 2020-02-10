@@ -40,9 +40,9 @@ class ShareController extends Controller
      */
     public function store(StoreShare $request)
     {
-     $share = Share::create($request -> all());
+     $share = Share::create($request->all());
      
-     return redirect()->route('shares.index')->with('success');
+     return redirect()->route('shares.index')->with('success','success');
     }
 
     /**
@@ -80,7 +80,6 @@ class ShareController extends Controller
      */
     public function update(StoreShare $request, $id)
     {
-        //   $share = Share::created($request -> all());
         $share = Share::findOrFail($id)->update($request->all());
         return redirect()->route('shares.create')->with('success');
     }
